@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build the Robot</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#eef5fb;
+  text-align:center;
+  margin:0;
+  color:#243b53;
+}
+
+header{
+  background:#274c77;
+  color:white;
+  padding:20px;
+}
+
+h1{ margin:5px; }
+
+.progress{
+  font-size:20px;
+  font-weight:bold;
+  margin-top:10px;
+}
+
+.game{
+  max-width:850px;
+  margin:25px auto;
+  background:white;
+  padding:25px;
+  border-radius:20px;
+  box-shadow:0 5px 18px rgba(0,0,0,.15);
+}
+
+.robot-area{
+  min-height:210px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.robot{
+  font-size:110px;
+  transition:.3s;
+}
+
+.missing{
+  opacity:.18;
+}
+
+.question{
+  font-size:25px;
+  font-weight:bold;
+  margin:20px 0;
+}
+
+.answers{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+button{
+  width:200px;
+  padding:18px 10px;
+  border:3px solid #274c77;
+  border-radius:15px;
+  background:white;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#e8f1fa;
+}
+
+.feedback{
+  min-height:45px;
+  margin-top:20px;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.complete{
+  font-size:30px;
+  color:#198754;
+}
+
+.restart{
+  background:#274c77;
+  color:white;
+  margin-top:15px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🤖 Build the Robot</h1>
+  <div>SENSE → PROCESS → ACT</div>
+  <div class="progress" id="progress">Step 1 of 3</div>
+</header>
+
+<div class="game">
+
+  <div class="robot-area">
+    <div id="robot" class="robot missing">🤖</div>
+  </div>
+
+  <div class="question" id="question">
+    The robot needs to detect an obstacle.<br>
+    What part does it need?
+  </div>
+
+  <div class="answers" id="answers">
+    <button onclick="answer('sensor')">👀 SENSOR<br><small>SENSE</small></button>
+    <button onclick="answer('controller')">🧠 CONTROLLER<br><small>PROCESS</small></button>
+    <button onclick="answer('motor')">⚙️ MOTOR<br><small>ACT</small></button>
+  </div>
+
+  <div class="feedback" id="feedback">
+    Choose the correct robot part.
+  </div>
+
+</div>
+
+<script>
+let step = 1;
+
+function answer(choice){
+
+  const feedback = document.getElementById("feedback");
+  const question = document.getElementById("question");
+  const progress = document.getElementById("progress");
+  const robot = document.getElementById("robot");
+
+  if(step === 1){
+
+    if(choice === "sensor"){
+      feedback.innerHTML = "✅ Great! The SENSOR helps the robot SENSE.";
+      robot.classList.remove("missing");
+      robot.style.opacity = ".45";
+
+      setTimeout(function(){
+        step = 2;
+        progress.innerHTML = "Step 2 of 3";
+        question.innerHTML =
+        "The robot detected the obstacle.<br>What part decides what to do?";
+        feedback.innerHTML = "Choose the correct robot part.";
+      },1000);
+
+    } else {
+      feedback.innerHTML = "❌ Try again. Which part can SENSE?";
+    }
+
+  } else if(step === 2){
+
+    if(choice === "controller"){
+      feedback.innerHTML =
+      "✅ Excellent! The CONTROLLER helps the robot PROCESS.";
+      robot.style.opacity = ".7";
+
+      setTimeout(function(){
+        step = 3;
+        progress.innerHTML = "Step 3 of 3";
+        question.innerHTML =
+        "Now the robot needs to move away.<br>What part makes it move?";
+        feedback.innerHTML = "Choose the correct robot part.";
+      },1000);
+
+    } else {
+      feedback.innerHTML =
+      "❌ Try again. Which part PROCESSES and decides?";
+    }
+
+  } else if(step === 3){
+
+    if(choice === "motor"){
+
+      robot.style.opacity = "1";
+
+      progress.innerHTML = "3 of 3 COMPLETE!";
+
+      question.innerHTML =
+      "🎉 ROBOT COMPLETE! 🎉";
+
+      document.getElementById("answers").innerHTML =
+      '<button class="restart" onclick="location.reload()">🔄 PLAY AGAIN</button>';
+
+      feedback.innerHTML =
+      '<div class="complete">👀 SENSE → 🧠 PROCESS → ⚙️ ACT</div>';
+
+    } else {
+      feedback.innerHTML =
+      "❌ Try again. Which part makes the robot ACT and MOVE?";
+    }
+  }
+}
+</script>
+
+</body>
+</html>
+
+ 
