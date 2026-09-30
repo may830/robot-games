@@ -7,96 +7,138 @@
 
 <style>
 body{
-  font-family: Arial, sans-serif;
-  background:#eef5fb;
-  text-align:center;
   margin:0;
+  font-family:Arial,sans-serif;
+  background:#eef4f8;
+  text-align:center;
   color:#243b53;
 }
-
 header{
   background:#274c77;
   color:white;
-  padding:20px;
+  padding:16px;
 }
-
-h1{ margin:5px; }
-
-.progress{
-  font-size:20px;
-  font-weight:bold;
-  margin-top:10px;
-}
+header h1{margin:0 0 6px;}
+#step{font-size:20px;font-weight:bold;}
 
 .game{
   max-width:850px;
-  margin:25px auto;
+  margin:20px auto;
   background:white;
-  padding:25px;
-  border-radius:20px;
-  box-shadow:0 5px 18px rgba(0,0,0,.15);
+  border-radius:22px;
+  padding:20px;
+  box-shadow:0 5px 18px #0002;
 }
 
 .robot-area{
-  min-height:210px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  height:300px;
+  position:relative;
+  margin:auto;
+  width:300px;
 }
 
-.robot{
-  font-size:110px;
-  transition:.3s;
+/* ROBOT HEAD */
+.head{
+  position:absolute;
+  width:180px;
+  height:100px;
+  left:60px;
+  top:10px;
+  background:#82c4e8;
+  border:5px solid #243b53;
+  border-radius:30px;
 }
 
-.missing{
-  opacity:.18;
+/* SENSOR EYES */
+.sensor{
+  display:none;
+  position:absolute;
+  top:35px;
+  width:32px;
+  height:32px;
+  background:#ffd166;
+  border:5px solid #243b53;
+  border-radius:50%;
 }
+.eye1{left:32px;}
+.eye2{right:32px;}
+
+/* BODY */
+.body{
+  position:absolute;
+  width:160px;
+  height:120px;
+  left:70px;
+  top:120px;
+  background:#9bd3ae;
+  border:5px solid #243b53;
+  border-radius:25px;
+}
+
+/* CONTROLLER */
+.controller{
+  display:none;
+  position:absolute;
+  width:90px;
+  height:55px;
+  left:30px;
+  top:28px;
+  background:#ff8fab;
+  border:4px solid #243b53;
+  border-radius:10px;
+  font-weight:bold;
+  line-height:55px;
+}
+
+/* MOTORS / WHEELS */
+.motor{
+  display:none;
+  position:absolute;
+  width:55px;
+  height:55px;
+  top:235px;
+  background:#777;
+  border:5px solid #243b53;
+  border-radius:50%;
+}
+.motor1{left:65px;}
+.motor2{right:65px;}
 
 .question{
-  font-size:25px;
+  font-size:24px;
   font-weight:bold;
-  margin:20px 0;
+  margin:10px;
 }
 
 .answers{
   display:flex;
   justify-content:center;
-  gap:15px;
+  gap:12px;
   flex-wrap:wrap;
 }
 
 button{
+  padding:16px;
   width:200px;
-  padding:18px 10px;
   border:3px solid #274c77;
-  border-radius:15px;
   background:white;
+  border-radius:14px;
   font-size:18px;
   font-weight:bold;
   cursor:pointer;
 }
+button:hover{background:#e6f2ff;}
 
-button:hover{
-  background:#e8f1fa;
-}
-
-.feedback{
-  min-height:45px;
-  margin-top:20px;
-  font-size:22px;
+#feedback{
+  font-size:21px;
   font-weight:bold;
+  min-height:35px;
+  margin-top:15px;
 }
 
 .complete{
-  font-size:30px;
   color:#198754;
-}
-
-.restart{
-  background:#274c77;
-  color:white;
-  margin-top:15px;
+  font-size:27px;
 }
 </style>
 </head>
@@ -104,109 +146,121 @@ button:hover{
 <body>
 
 <header>
-  <h1>🤖 Build the Robot</h1>
-  <div>SENSE → PROCESS → ACT</div>
-  <div class="progress" id="progress">Step 1 of 3</div>
+<h1>🤖 Build the Robot</h1>
+<div>SENSE → PROCESS → ACT</div>
+<div id="step">Step 1 of 3</div>
 </header>
 
 <div class="game">
 
-  <div class="robot-area">
-    <div id="robot" class="robot missing">🤖</div>
+<div class="robot-area">
+
+  <div class="head">
+    <div id="sensor1" class="sensor eye1"></div>
+    <div id="sensor2" class="sensor eye2"></div>
   </div>
 
-  <div class="question" id="question">
-    The robot needs to detect an obstacle.<br>
-    What part does it need?
+  <div class="body">
+    <div id="controller" class="controller">CONTROL</div>
   </div>
 
-  <div class="answers" id="answers">
-    <button onclick="answer('sensor')">👀 SENSOR<br><small>SENSE</small></button>
-    <button onclick="answer('controller')">🧠 CONTROLLER<br><small>PROCESS</small></button>
-    <button onclick="answer('motor')">⚙️ MOTOR<br><small>ACT</small></button>
-  </div>
+  <div id="motor1" class="motor motor1"></div>
+  <div id="motor2" class="motor motor2"></div>
 
-  <div class="feedback" id="feedback">
-    Choose the correct robot part.
-  </div>
+</div>
+
+<div id="question" class="question">
+The robot needs to detect an obstacle.<br>
+Which part should we add?
+</div>
+
+<div id="answers" class="answers">
+<button onclick="choose('sensor')">👀 SENSOR<br>SENSE</button>
+<button onclick="choose('controller')">🧠 CONTROLLER<br>PROCESS</button>
+<button onclick="choose('motor')">⚙️ MOTOR<br>ACT</button>
+</div>
+
+<div id="feedback">Choose a robot part.</div>
 
 </div>
 
 <script>
-let step = 1;
+let stage=1;
 
-function answer(choice){
+function choose(part){
 
-  const feedback = document.getElementById("feedback");
-  const question = document.getElementById("question");
-  const progress = document.getElementById("progress");
-  const robot = document.getElementById("robot");
+let feedback=document.getElementById("feedback");
+let question=document.getElementById("question");
+let step=document.getElementById("step");
 
-  if(step === 1){
+if(stage===1){
 
-    if(choice === "sensor"){
-      feedback.innerHTML = "✅ Great! The SENSOR helps the robot SENSE.";
-      robot.classList.remove("missing");
-      robot.style.opacity = ".45";
+ if(part==="sensor"){
+   document.getElementById("sensor1").style.display="block";
+   document.getElementById("sensor2").style.display="block";
 
-      setTimeout(function(){
-        step = 2;
-        progress.innerHTML = "Step 2 of 3";
-        question.innerHTML =
-        "The robot detected the obstacle.<br>What part decides what to do?";
-        feedback.innerHTML = "Choose the correct robot part.";
-      },1000);
+   feedback.innerHTML="✅ Correct! SENSOR = SENSE 👀";
 
-    } else {
-      feedback.innerHTML = "❌ Try again. Which part can SENSE?";
-    }
+   setTimeout(()=>{
+     stage=2;
+     step.innerHTML="Step 2 of 3";
+     question.innerHTML=
+     "The robot sensed the obstacle.<br>Which part decides what to do?";
+     feedback.innerHTML="Choose the next robot part.";
+   },900);
 
-  } else if(step === 2){
+ }else{
+   feedback.innerHTML="❌ Try again. The robot needs to SENSE.";
+ }
+}
 
-    if(choice === "controller"){
-      feedback.innerHTML =
-      "✅ Excellent! The CONTROLLER helps the robot PROCESS.";
-      robot.style.opacity = ".7";
+else if(stage===2){
 
-      setTimeout(function(){
-        step = 3;
-        progress.innerHTML = "Step 3 of 3";
-        question.innerHTML =
-        "Now the robot needs to move away.<br>What part makes it move?";
-        feedback.innerHTML = "Choose the correct robot part.";
-      },1000);
+ if(part==="controller"){
+   document.getElementById("controller").style.display="block";
 
-    } else {
-      feedback.innerHTML =
-      "❌ Try again. Which part PROCESSES and decides?";
-    }
+   feedback.innerHTML="✅ Correct! CONTROLLER = PROCESS 🧠";
 
-  } else if(step === 3){
+   setTimeout(()=>{
+     stage=3;
+     step.innerHTML="Step 3 of 3";
+     question.innerHTML=
+     "The robot decided to move.<br>Which part makes it move?";
+     feedback.innerHTML="Choose the final robot part.";
+   },900);
 
-    if(choice === "motor"){
+ }else{
+   feedback.innerHTML="❌ Try again. Which part makes the decision?";
+ }
+}
 
-      robot.style.opacity = "1";
+else if(stage===3){
 
-      progress.innerHTML = "3 of 3 COMPLETE!";
+ if(part==="motor"){
 
-      question.innerHTML =
-      "🎉 ROBOT COMPLETE! 🎉";
+   document.getElementById("motor1").style.display="block";
+   document.getElementById("motor2").style.display="block";
 
-      document.getElementById("answers").innerHTML =
-      '<button class="restart" onclick="location.reload()">🔄 PLAY AGAIN</button>';
+   step.innerHTML="ROBOT COMPLETE! 🎉";
 
-      feedback.innerHTML =
-      '<div class="complete">👀 SENSE → 🧠 PROCESS → ⚙️ ACT</div>';
+   question.innerHTML="🎉 Great job! You built the robot!";
 
-    } else {
-      feedback.innerHTML =
-      "❌ Try again. Which part makes the robot ACT and MOVE?";
-    }
-  }
+   feedback.innerHTML=
+   '<div class="complete">👀 SENSE → 🧠 PROCESS → ⚙️ ACT</div>';
+
+   document.getElementById("answers").innerHTML=
+   '<button onclick="location.reload()">🔄 BUILD AGAIN</button>';
+
+ }else{
+   feedback.innerHTML="❌ Try again. Which part makes the robot MOVE?";
+ }
+}
+
 }
 </script>
 
 </body>
 </html>
 
- 
+👉 بس الصقيه الآن، ولا تعملي Commit بعد.
+لما يخلص قوليلي لصقت.
