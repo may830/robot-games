@@ -1,97 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Robot Parts Matching Game</title>
-<style>
-*{box-sizing:border-box}
-body{font-family:Arial,sans-serif;margin:0;background:#f3f6fb;color:#172033;text-align:center}
-header{background:#fff;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
-h1{margin:0 0 8px;font-size:34px}
-#progress,#score{font-size:20px;font-weight:bold;margin:5px}
-main{max-width:1000px;margin:auto;padding:22px}
-#clue{background:#fff;border:3px solid #cfd9e8;border-radius:22px;padding:28px;margin:18px auto;font-size:29px;font-weight:bold;min-height:110px;display:flex;align-items:center;justify-content:center}
-.options{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.choice{background:#fff;border:4px solid #8093ad;border-radius:22px;padding:20px 10px;font-size:23px;font-weight:bold;cursor:pointer;min-height:150px}
-.choice:hover{background:#edf4ff}.icon{font-size:52px;display:block;margin-bottom:8px}.hint{font-size:16px;font-weight:normal}
-#feedback{font-size:29px;font-weight:bold;min-height:45px;margin:18px}
-#nextBtn,#restartBtn{border:0;border-radius:16px;padding:16px 34px;font-size:24px;font-weight:bold;cursor:pointer;background:#172033;color:white;margin:8px}
-#restartBtn{display:none}
-#answerHelp{font-size:17px;margin-top:8px}
-@media(max-width:700px){.options{grid-template-columns:1fr}h1{font-size:27px}#clue{font-size:23px}}
-</style>
-</head>
-<body>
-<header>
-<h1>🤖 Match the Robot Parts</h1>
-<div id="progress">Question 1 of 8</div>
-<div id="score">Score: 0 / 8</div>
-</header>
-<main>
-<div id="clue"></div>
-<div class="options">
-<button class="choice" onclick="choose('Sensor')"><span class="icon">👀</span>SENSOR<div class="hint">SENSES</div></button>
-<button class="choice" onclick="choose('Controller')"><span class="icon">🧠</span>CONTROLLER<div class="hint">PROCESSES / DECIDES</div></button>
-<button class="choice" onclick="choose('Motor')"><span class="icon">⚙️</span>MOTOR<div class="hint">ACTS / MOVES</div></button>
-</div>
-<div id="feedback">Choose an answer.</div>
-<button id="nextBtn" onclick="goNext()">NEXT QUESTION ➜</button>
-<button id="restartBtn" onclick="restart()">PLAY AGAIN ↻</button>
-<div id="answerHelp">You can press Next even after a wrong answer.</div>
-</main>
-<script>
-var questions = [
- {q:"1. Which robot part detects an obstacle?", a:"Sensor"},
- {q:"2. Which robot part makes the wheels turn?", a:"Motor"},
- {q:"3. Which robot part receives information and decides what to do?", a:"Controller"},
- {q:"4. Which robot part can detect light or color?", a:"Sensor"},
- {q:"5. Which robot part makes the robot move forward?", a:"Motor"},
- {q:"6. Which robot part processes information from the sensors?", a:"Controller"},
- {q:"7. Which robot part helps the robot sense its environment?", a:"Sensor"},
- {q:"8. Which robot part carries out movement after a command?", a:"Motor"}
-];
-var current=0, scoreNum=0, answered=false;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robotics Learning Games</title>
 
-function render(){
- document.getElementById("progress").innerHTML="Question "+(current+1)+" of "+questions.length;
- document.getElementById("score").innerHTML="Score: "+scoreNum+" / "+questions.length;
- document.getElementById("clue").innerHTML=questions[current].q;
- document.getElementById("feedback").innerHTML="Choose an answer.";
- answered=false;
-}
-function choose(value){
- if(answered){return;}
- answered=true;
- if(value===questions[current].a){
-   scoreNum++;
-   document.getElementById("feedback").innerHTML="✓ Correct! Great job!";
- }else{
-   document.getElementById("feedback").innerHTML="✗ Try again next time. Correct answer: "+questions[current].a;
- }
- document.getElementById("score").innerHTML="Score: "+scoreNum+" / "+questions.length;
-}
-function goNext(){
- if(current < questions.length-1){
-   current++;
-   render();
- }else{
-   document.getElementById("progress").innerHTML="Finished!";
-   document.getElementById("clue").innerHTML="🎉 Game Complete!";
-   document.getElementById("feedback").innerHTML="Final Score: "+scoreNum+" / "+questions.length;
-   document.getElementById("nextBtn").style.display="none";
-   document.getElementById("restartBtn").style.display="inline-block";
-   document.getElementById("answerHelp").style.display="none";
- }
-}
-function restart(){
- current=0;scoreNum=0;
- document.getElementById("nextBtn").style.display="inline-block";
- document.getElementById("restartBtn").style.display="none";
- document.getElementById("answerHelp").style.display="block";
- render();
-}
-render();
-</script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f8fb;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #243b53;
+      font-size: 40px;
+    }
+
+    p {
+      font-size: 20px;
+      color: #52606d;
+    }
+
+    .game {
+      background: white;
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .robot {
+      font-size: 65px;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 15px 30px;
+      background: #1677ff;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .button:hover {
+      background: #095dcc;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🤖 Robotics Learning Games</h1>
+
+  <p>Choose a game and start learning!</p>
+
+  <div class="game">
+    <div class="robot">🤖</div>
+
+    <h2>Robot Parts Matching Game</h2>
+
+    <p>
+      Match each robot function with the correct robot part.
+    </p>
+
+    <a class="button" href="game1.html">
+      ▶ Play Game
+    </a>
+  </div>
+
 </body>
 </html>
