@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Click the Robot Part</title>
+<style>
+*{box-sizing:border-box} body{font-family:Arial,sans-serif;margin:0;background:#f4f7fb;color:#152238;text-align:center}
+header{background:white;padding:14px;box-shadow:0 2px 8px #0002} h1{margin:4px;font-size:30px}
+#prompt{font-size:28px;font-weight:bold;margin:12px} #info{font-size:18px;font-weight:bold}
+main{max-width:900px;margin:auto;padding:16px}.board{display:grid;grid-template-columns:1fr 230px;gap:16px;align-items:start}
+.robotbox,.panel{background:white;border:3px solid #d7dfeb;border-radius:20px;padding:12px}
+svg{width:100%;max-height:590px}.part{cursor:pointer}.part:hover{filter:brightness(1.08)}
+.panel{font-size:18px}.feedback{min-height:70px;font-size:24px;font-weight:bold;padding:12px}
+button{width:100%;padding:15px;margin-top:10px;border:0;border-radius:14px;background:#17365d;color:white;font-size:20px;font-weight:bold;cursor:pointer}
+.legend{margin-top:16px;text-align:left;line-height:2;font-size:17px}.hidden{display:none}
+@media(max-width:650px){.board{grid-template-columns:1fr}h1{font-size:25px}#prompt{font-size:23px}}
+</style></head>
+<body>
+<header><h1>🤖 Click the Robot Part</h1><div id="info">Question 1 of 6 • Score: 0 / 6</div><div id="prompt">Find the SENSOR 👀</div></header>
+<main><div class="board">
+<div class="robotbox">
+<svg viewBox="0 0 520 560" aria-label="Clickable robot">
+<rect x="145" y="70" width="230" height="160" rx="45" fill="#9cc7df" stroke="#152238" stroke-width="7"/>
+<rect x="175" y="105" width="170" height="85" rx="25" fill="white" stroke="#152238" stroke-width="5"/>
+<g id="sensor" class="part">
+<circle cx="220" cy="147" r="25" fill="#ffd56a" stroke="#152238" stroke-width="6"/><circle cx="300" cy="147" r="25" fill="#ffd56a" stroke="#152238" stroke-width="6"/>
+<circle cx="220" cy="147" r="8" fill="#152238"/><circle cx="300" cy="147" r="8" fill="#152238"/>
+</g>
+<line x1="260" y1="70" x2="260" y2="38" stroke="#152238" stroke-width="7"/><circle cx="260" cy="28" r="13" fill="#ef7c6a" stroke="#152238" stroke-width="5"/>
+<rect x="125" y="230" width="270" height="210" rx="35" fill="#b7d9ad" stroke="#152238" stroke-width="7"/>
+<g id="controller" class="part">
+<rect x="185" y="270" width="150" height="105" rx="16" fill="#fff" stroke="#152238" stroke-width="6"/>
+<path d="M210 302h100M210 327h100M210 352h60" stroke="#6c78bd" stroke-width="9" stroke-linecap="round"/><circle cx="300" cy="352" r="9" fill="#6c78bd"/>
+</g>
+<line x1="125" y1="285" x2="70" y2="345" stroke="#152238" stroke-width="15" stroke-linecap="round"/><line x1="395" y1="285" x2="450" y2="345" stroke="#152238" stroke-width="15" stroke-linecap="round"/>
+<g id="motor" class="part">
+<circle cx="175" cy="455" r="48" fill="#e7a6a6" stroke="#152238" stroke-width="7"/><circle cx="345" cy="455" r="48" fill="#e7a6a6" stroke="#152238" stroke-width="7"/>
+<circle cx="175" cy="455" r="19" fill="white" stroke="#152238" stroke-width="5"/><circle cx="345" cy="455" r="19" fill="white" stroke="#152238" stroke-width="5"/>
+</g>
+<text x="260" y="535" text-anchor="middle" font-family="Arial" font-size="18" fill="#152238">Click directly on the robot part</text>
+</svg></div>
+<div class="panel"><div id="feedback" class="feedback">Click a part.</div>
+<button id="next">NEXT QUESTION ➜</button><button id="restart" class="hidden">PLAY AGAIN ↻</button>
+<div class="legend"><b>Remember:</b><br>👀 Sensor = SENSE<br>🧠 Controller = PROCESS<br>⚙️ Motor = ACT</div></div>
+</div></main>
+<script>
+const qs=[['sensor','SENSOR 👀'],['controller','CONTROLLER 🧠'],['motor','MOTOR ⚙️'],['sensor','SENSOR 👀'],['motor','MOTOR ⚙️'],['controller','CONTROLLER 🧠']];
+let i=0,score=0,done=false;
+const $=id=>document.getElementById(id);
+function show(){done=false;$('info').textContent=`Question ${i+1} of ${qs.length} • Score: ${score} / ${qs.length}`;$('prompt').textContent='Find the '+qs[i][1];$('feedback').textContent='Click a part.'}
+function pick(id){if(done)return;if(id===qs[i][0]){done=true;score++;$('feedback').textContent='✓ Correct! Great job!';$('info').textContent=`Question ${i+1} of ${qs.length} • Score: ${score} / ${qs.length}`}else{$('feedback').textContent='✗ Try again!'}}
+['sensor','controller','motor'].forEach(id=>$(id).addEventListener('click',()=>pick(id)));
+$('next').addEventListener('click',()=>{if(i<qs.length-1){i++;show()}else{$('prompt').textContent='🎉 Game Complete!';$('feedback').textContent=`Final Score: ${score} / ${qs.length}`;$('next').classList.add('hidden');$('restart').classList.remove('hidden')}});
+$('restart').addEventListener('click',()=>{i=0;score=0;$('next').classList.remove('hidden');$('restart').classList.add('hidden');show()});show();
+</script></body></html>
